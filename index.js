@@ -14,6 +14,8 @@ app.on('ready', () => {
         }
     })
     mainWindow.loadURL(`file://${__dirname}/main.html`);
+    mainWindow.on('closed', () => app.quit());
+
     const mainMenu = Menu.buildFromTemplate(menuTemplate);
     Menu.setApplicationMenu(mainMenu);
 });
