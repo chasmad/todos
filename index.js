@@ -1,19 +1,12 @@
 const electron = require('electron');
-const { app,
-    BrowserWindow,
-    Menu,
-    ipcMain
-} = electron;
+
+const { app, BrowserWindow, Menu, ipcMain } = electron;
 
 let mainWindow;
 let addWindow;
 
 app.on('ready', () => {
-    mainWindow = new BrowserWindow({
-        webPreferences: {
-            nodeIntegration: true
-        }
-    })
+    mainWindow = new BrowserWindow({});
     mainWindow.loadURL(`file://${__dirname}/main.html`);
     mainWindow.on('closed', () => app.quit());
 
@@ -42,18 +35,19 @@ const menuTemplate = [
         submenu: [
             {
                 label: 'New Todo',
+                click() { createAddWindow(); }
+            },
+            {
+                label: 'Clear Todos',
                 click() {
-                    createAddWindow();
+                    mainWindow.webContents.send('todo:clear');
                 }
             },
             {
                 label: 'Quit',
-                accelerator:
-                    process.platform === 'darwin'
-                        ? 'Command+Q'
-                        : 'Ctrl+Q',
+                accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
                 click() {
-                    app.quit()
+                    app.quit();
                 }
             }
         ]
@@ -61,7 +55,7 @@ const menuTemplate = [
 ];
 
 if (process.platform === 'darwin') {
-    menuTemplate.unshift({ label: '' });
+    menuTemplate.unshift({label: ''});
 }
 
 if (process.env.NODE_ENV !== 'production') {
