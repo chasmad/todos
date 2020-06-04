@@ -6,12 +6,17 @@ let mainWindow;
 let addWindow;
 
 app.on('ready', () => {
-    mainWindow = new BrowserWindow({});
-    mainWindow.loadURL(`file://${__dirname}/main.html`);
-    mainWindow.on('closed', () => app.quit());
+    mainWindow = new BrowserWindow({
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
+});
+mainWindow.loadURL(`file://${__dirname}/main.html`);
+mainWindow.on('closed', () => app.quit());
 
-    const mainMenu = Menu.buildFromTemplate(menuTemplate);
-    Menu.setApplicationMenu(mainMenu);
+const mainMenu = Menu.buildFromTemplate(menuTemplate);
+Menu.setApplicationMenu(mainMenu);
 });
 
 function createAddWindow() {
@@ -55,7 +60,7 @@ const menuTemplate = [
 ];
 
 if (process.platform === 'darwin') {
-    menuTemplate.unshift({label: ''});
+    menuTemplate.unshift({ label: '' });
 }
 
 if (process.env.NODE_ENV !== 'production') {
