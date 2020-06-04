@@ -1,4 +1,5 @@
-<head></head>
+<head>
+</head>
 
 <body>
     <form>
@@ -10,10 +11,14 @@
     </form>
 
     <script>
+        const electron = require('electron');
+        const { ipcRenderer } = electron;
+
         document.querySelector('form').addEventListener('submit', (event) => {
             event.preventDefault();
 
-            debugger;
+            const { value } = document.querySelector('input');
+            ipcRenderer.send('todo:add', value);
         });
     </script>
 </body>
